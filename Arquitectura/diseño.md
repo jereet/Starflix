@@ -14,7 +14,7 @@ Frontend -> API Gateway -> Catalog Service -> MongoDB(Movies)
 
 ## **RF-04. Identificación de usuarios**
 
-Frontend -> API Gateway -> Catalog Service -> MongoDB (User)
+Frontend -> API Gateway -> Catalog Service -> MongoDB (Users)
 
 ## **RF-05. Emisión de valoraciones y reseñas**
 
@@ -34,19 +34,19 @@ Frontend -> API Gateway -> Recommendation Service -> [Modelos e indices precalcu
 
 ## **RF-09. Curación y normalización de datos**
 
-MongoDB -> Cleaning Agent -> [Reglas de Limpieza] LLM -> MongoDB(Movies)
+MongoDB -> Cleaning Service -> [Reglas de Limpieza] Clean LLM -> MongoDB(Movies)
 
 
 ## **RF-10. Resolución semántica mediante LLM**
 
-MongoDB -> Cleaning Agent -> LLM -> [Resultado inferido] Cleaning Agent -> MongoDB(Movies)
+MongoDB -> Cleaning Service -> Clean LLM -> [Resultado inferido] Cleaning Service -> MongoDB(Movies)
 
 
 ## **RF-11. Auditoría de curación de datos**
 
-Cleaning Agent -> Audit Logs (MongoDB)
+Cleaning Service -> MongoDB (Audit Logs)
 
-Podría ser un módulo del propio Cleaning Agent encargado de registrar:
+Podría ser un módulo del propio Cleaning Service encargado de registrar:
 - Tipo de anomalía.
 - Registro afectado.
 - Valor original.
@@ -56,13 +56,14 @@ Podría ser un módulo del propio Cleaning Agent encargado de registrar:
 
 ## **RF-12. Visualización de auditoría**
 
-Frontend -> API Gateway -> Cleaning Agent -> MongoDB (Audit Logs)
+Frontend -> API Gateway -> Cleaning Service -> MongoDB (Audit Logs)
 
-Cleaning Agent puede ofrecer endpoints específicos para consultar las métricas generales y los detalles de cada modificación.
+Cleaning Service puede ofrecer endpoints específicos para consultar las métricas generales y los detalles de cada modificación.
 
 ## **RF-13. Gestión del estado de inicialización** y **RF-14. Disponibilidad progresiva de funcionalidades**
 
-Cleaning Agent -> System State <-> [Recommendation service] <-> API Gateway -> Frontend
+Cleaning Service -> System State <-> [Recommendation service] /
+                                 <-> API Gateway -> Frontend
 
 El estado debería contemplar, como mínimo, dos procesos:
 - Estado de curación del catálogo.
@@ -72,7 +73,7 @@ El frontend consulta el estado a través del Gateway y habilita o restringe las 
 
 ## **RF-15. Traducción de contenidos (deseable)** y **RF-16. Asistente cinéfilo conversacional (deseable)**
 
-Frontend -> API Gateway -> AI Service -> LLM
+Frontend -> API Gateway -> AI Service -> LLM /
                                       -> Catalog Service -> MongoDB(Movies)
 
 
@@ -110,7 +111,7 @@ Interaction Worker se encarga de consumirlo y guardarlo.
 * Obtener películas similares.
 * Actualizar sus modelos en cuanto recibe nuevas interacciones o cuando se cure el catalogo.
 
-## Cleaning Agent: (Dominio: Curación de datos) - Microservicio
+## Cleaning Service: (Dominio: Curación de datos) - Microservicio
 
 1. Detecta una reseña con problemas.
     * Duplicados.
